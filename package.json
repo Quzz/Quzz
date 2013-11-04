@@ -9,6 +9,8 @@
     "express": "3.4.4",
     "jade": "*",
     "less-middleware": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "hashids": "0.3.1",
+    "session.socket.io": "*"
   }
 }
