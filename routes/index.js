@@ -16,5 +16,7 @@ exports.index = function(req, res) {
  * GET mobile client. 
  */
 exports.client = function(req, res) {
+  req.session.gameId = req.params.gameId;
+  
   res.render('client', {title: 'Ulfried'});
 }

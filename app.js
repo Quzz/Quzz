@@ -46,15 +46,41 @@ app.configure('development', function() {
 });
 
 app.get('/', routes.index);
-app.get('/client/:id', routes.client);
+app.get('/client/:gameId', routes.client);
 
 sessionSockets.on('connection', function (err, socket, session) {
   if(!session) {
     socket.emit('reload');
   } else {
-    socket.emit('question', { question: 'Was isst du denn für ne Marmelade gerne?', gameId: session.gameId });  
+    var gameId = session.gameId;
+    socket.emit('init', { gameId: gameId });
+    socket.join(gameId);
+
+    socket.on('type', function(data) {
+      if(data.type == 'DESKTOP') {
+        session.isDesktop = true;
+        session.isClient = false;
+      } else {
+        session.isDesktop = false;
+        session.isClient = true;
+      }
+      session.save();
+
+      socket.emit('init_finished');
+    });
+
+    socket.on('request_question', function(data) {
+      if(session.isDesktop) {
+        var question = getRandomQuestion();
+        socket.emit('got_question', question);
+      }
+    });
   }
 });
+
+function getRandomQuestion() {
+  return {question: "Was ist der Sinn des Lebens?", answers: ["42", "Deine Mudda", "Heinz Erhardts Witze", "Gibts nicht idh."], correctAnswer: 0};
+}
 
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

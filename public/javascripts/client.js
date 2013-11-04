@@ -1,9 +1,10 @@
+var gameId = "";
+
 var socket = io.connect('http://localhost');
 
-socket.on('question', function (data) {
-	console.log("Der Server so: " + data.question);
-	console.log("Und daraufhin ich so: Erdbeermarmelade!")
-	socket.emit('answer', { answer: 'Erdbeermarmelade!' });
+socket.on('init', function(data) {
+	gameId = data.gameId;
+	socket.send('type', {type: "CLIENT"});
 });
 
 socket.on('reload', function() {
