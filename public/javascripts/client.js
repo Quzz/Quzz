@@ -10,3 +10,7 @@ socket.on('init', function(data) {
 socket.on('reload', function() {
 	location.reload();
 });
+
+socket.on('make_choice', function(data) {
+	alert(data);
+});

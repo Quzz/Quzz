@@ -64,6 +64,14 @@ sessionSockets.on('connection', function (err, socket, session) {
         session.emit('error', {message: 'WTF are you doin\'?!'});
       }
     });
+
+    socket.on('start_choices', function(data) {
+      if(session.isDesktop) {
+        socket.broadcast.to(gameId).emit('make_choice', data);
+      } else {
+        session.emit('error', {message: 'WTF are you doin\'?!'});
+      }
+    });
   }
 });
 
