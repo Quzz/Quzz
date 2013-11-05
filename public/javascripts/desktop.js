@@ -1,6 +1,6 @@
 var gameId = "";
 
-var socket = io.connect('http://localhost');
+var socket = io.connect();
 
 socket.on('init', function(data) {
 	gameId = data.gameId;

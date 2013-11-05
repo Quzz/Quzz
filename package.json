@@ -11,6 +11,7 @@
     "less-middleware": "*",
     "socket.io": "*",
     "hashids": "0.3.1",
-    "session.socket.io": "*"
+    "session.socket.io": "*",
+    "qrcode-npm": "*"
   }
 }
