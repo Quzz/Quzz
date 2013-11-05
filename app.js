@@ -56,23 +56,12 @@ sessionSockets.on('connection', function (err, socket, session) {
     socket.emit('init', { gameId: gameId });
     socket.join(gameId);
 
-    socket.on('type', function(data) {
-      if(data.type == 'DESKTOP') {
-        session.isDesktop = true;
-        session.isClient = false;
-      } else {
-        session.isDesktop = false;
-        session.isClient = true;
-      }
-      session.save();
-
-      socket.emit('init_finished');
-    });
-
     socket.on('request_question', function(data) {
       if(session.isDesktop) {
         var question = getRandomQuestion();
         socket.emit('got_question', question);
+      } else {
+        session.emit('error', {message: 'WTF are you doin\'?!'});
       }
     });
   }
