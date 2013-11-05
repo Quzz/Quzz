@@ -1,28 +1,33 @@
 var Hashids = require("hashids"),
-    hashids = new Hashids("Erdbeermarmelade!");
+    hashids = new Hashids("Erdbeermarmelade!", 1);
 
 /*
  * GET home page.
  */
 
 exports.index = function(req, res) {
-  if(!req.session.gameId) {
-    req.session.gameId = hashids.encrypt(new Date().getTime());
+  var session = req.session;
+  if(!session.gameId) {
+    session.gameId = hashids.encrypt(parseInt(Math.random() * 1000));
   }
+
+  session.isDesktop = true;
+  session.isClient = false;
+
   res.render('index', {title: 'Heinz', gameId: req.session.gameId});
 
-	session.isDesktop = true;
-  session.isClient = false;
 };
 
 /*
  * GET mobile client. 
  */
 exports.client = function(req, res) {
-  req.session.gameId = req.params.gameId;
-  
-  res.render('client', {title: 'Ulfried'});
+  var session = req.session;
 
+  session.gameId = req.params.gameId;
+  
   session.isDesktop = false;
   session.isClient = true;
+
+  res.render('client', {title: 'Ulfried'});
 }
