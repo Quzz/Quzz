@@ -53,7 +53,7 @@ sessionSockets.on('connection', function (err, socket, session) {
     socket.emit('reload');
   } else {
     var gameId = session.gameId;
-    socket.emit('init', { gameId: gameId });
+    socket.emit('init', { gameId: gameId, isDesktop: session.isDesktop, isClient: session.isClient });
     socket.join(gameId);
 
     socket.on('request_question', function(data) {
@@ -61,7 +61,7 @@ sessionSockets.on('connection', function (err, socket, session) {
         var question = getRandomQuestion();
         socket.emit('got_question', question);
       } else {
-        session.emit('error', {message: 'WTF are you doin\'?!'});
+        sendError(socket);
       }
     });
 
@@ -69,11 +69,24 @@ sessionSockets.on('connection', function (err, socket, session) {
       if(session.isDesktop) {
         socket.broadcast.to(gameId).emit('make_choice', data);
       } else {
-        session.emit('error', {message: 'WTF are you doin\'?!'});
+        sendError(socket);
+      }
+    });
+
+    socket.on('player_inited', function(data) {
+      console.log("PLAYER");
+      if(session.isClient) {
+        socket.broadcast.to(gameId).emit('player_connected', data);
+      } else {
+        sendError(socket);
       }
     });
   }
 });
+
+function sendError(socket) {
+  socket.emit('error', {message: 'WTF are you doin\'?!'});
+}
 
 function getRandomQuestion() {
   return {question: "Was ist der Sinn des Lebens?", answers: ["42", "Deine Mudda", "Heinz Erhardts Witze", "Gibts nicht idh."], correctAnswer: 0};

@@ -1,7 +1,16 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title} 
+  h1 Quzz
+  
+  div#intro
+    p Hey there! Please enter your desired name below and press "Go!".
+    div.form-inline
+        .form-group
+          label.sr-only(for="input-name") Name
+          input(type="text", class="form-control", id="input-name", placeholder="Name")
+        button(type="submit", class="btn btn-primary", id="button-submit-name") Go!
+  div#waiting
+    p Waiting for the action...
 
   script(src='/javascripts/client.js')

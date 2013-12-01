@@ -10,7 +10,7 @@ var qrCode = require('qrcode-npm');
 exports.index = function(req, res) {
   var session = req.session;
   if(!session.gameId) {
-    session.gameId = hashids.encrypt(parseInt(Math.random() * 1000));
+    session.gameId = 42; //TEMPORARY! //hashids.encrypt(parseInt(Math.random() * 1000));
   }
 
   session.isDesktop = true;

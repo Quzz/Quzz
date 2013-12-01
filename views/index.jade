@@ -6,6 +6,9 @@ block content
     .page-header
       h1 Quzz
       p.lead To start a game, each player has to scan this QR-Code with his mobile and then open the site referenced in it. When everyone's ready, please press the "Ready"-Button.
+      p!= gameId
       p!= qrCode
+      ul#participants
+      button(type="button", id="ready-button", class="btn btn-lg btn-primary") Ready!
 
   script(src='/javascripts/desktop.js')
